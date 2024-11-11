@@ -4,6 +4,7 @@ const esbuild = require('esbuild');
 const fs = require("fs");
 const htmlTemplate = require('./lib/html-template');
 const buildHtml = require('./lib/build-html');
+const serialice = require('./lib/html-template');
 
 const lexDevPlugin = (outputPath, entryPoint, htmlBase) => 
 ({
@@ -22,18 +23,25 @@ const lexDevPlugin = (outputPath, entryPoint, htmlBase) =>
     }
 })
 
-const buildDev = async(entryPoints, output, htmlBase=htmlTemplate) => Promise.all
-([...entryPoints].map(entryPoint => esbuild.build
-({
-    entryPoints: [entryPoint],
-    bundle: true,
-    minify: false,
-    platform: "browser",
-    jsxFactory: "Lex.createElement",
-    jsxFragment: "Lex.fragment",
-    write: false,
-    plugins : [lexDevPlugin(output, entryPoint, htmlBase)]
-})))
+const buildDev = async(layout, page, output) =>
+{
+    return esbuild.build
+    ({
+        stdin:
+        {
+            contents: serialice(page, layout),
+            loader: 'js',
+        },
+        bundle: true,
+        minify: false,
+        platform: "browser",
+        jsxFactory: "Lex.createElement",
+        jsxFragment: "Lex.fragment",
+        write: false,
+        plugins : [lexDevPlugin(output, entryPoint, htmlBase)]
+    })
+}
+
 
 const buildHtmlDev = async(entryPoints, output) => 
 [...entryPoints].map(entryPoint =>
