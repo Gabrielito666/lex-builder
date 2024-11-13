@@ -58,7 +58,7 @@ const buildDev = async(page, layout, output) =>
 
 const buildHtmlDev = async(entryPoint, output) => 
 {
-    const html = buildHtml_(entryPoint);
+    const html = buildHtml_(entryPoint, {});
     fs.writeFileSync(output, html, 'utf-8')
     return output;
 };
