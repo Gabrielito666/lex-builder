@@ -3,7 +3,7 @@ const { minify } = require('html-minifier')
 
 const esbuild = require('esbuild');
 const fs = require("fs");
-const buildHtml_ = require('./lib/build-html');
+//const buildHtml_ = require('./lib/build-html');
 const serialice = require('./lib/html-template');
 const path = require('path');
 
@@ -16,7 +16,7 @@ const lexDevPlugin = (outputPath, { mode="dev" }) =>
         {
             if (result.errors.length > 0) return result.errors;
             for(let output of result.outputFiles)
-            {   
+            {
                 const html = mode == "production" ?
                 minify(getNewBundle(output),
                 {
@@ -30,6 +30,18 @@ const lexDevPlugin = (outputPath, { mode="dev" }) =>
                 fs.writeFileSync(outputPath, html);
             }
         })
+        /*build.onLoad({ filter: /\.jsx$/ }, (args) => {
+            if(args.path)
+            {
+                const contents = fs.readFileSync(args.path, "utf8");
+                return {
+                  contents: `
+                  import Lex from "@lek-js/lex";
+                  ${contents}`,
+                  loader: "jsx",
+                };
+            }
+        });*/
     }
 })
 
@@ -51,11 +63,12 @@ const buildDev = async(page, layout, output) =>
         jsxFactory: "Lex.createElement",
         jsxFragment: "Lex.fragment",
         write: false,
-        plugins : [lexDevPlugin(output)]
+        plugins : [lexDevPlugin(output, {})],
+        external: [],
     })
 }
-
-
+// if(document.querySelector("body").lastChild !== main) document.querySelector("body").appendChild(main) de footer
+/*
 const buildHtmlDev = async(entryPoint, output) => 
 {
     const html = buildHtml_(entryPoint, {});
@@ -84,11 +97,15 @@ const build = (page, layout, output) =>
         plugins : [lexDevPlugin(output, { mode: 'production' })]
     })
 }
+
 const buildHtml = (entryPoint, output) =>
 {
     const html = buildHtml_(entryPoint, { mode: "production" });
     fs.writeFileSync(output, html, 'utf-8');
     return output;
 }
-
+*/
+const buildHtml = null;
+const buildHtmlDev = null;
+const build = null;
 module.exports = { buildDev, buildHtmlDev, build, buildHtml };
