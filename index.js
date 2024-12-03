@@ -3,13 +3,12 @@ const { minify } = require('html-minifier')
 
 const esbuild = require('esbuild');
 const fs = require("fs");
-//const buildHtml_ = require('./lib/build-html');
-const serialice = require('./lib/html-template');
+const serialice = require('./lib/serialice');
 const path = require('path');
 
-const lexDevPlugin = (outputPath, { mode="dev" }) => 
+const lexPlugin = (outputPath, { mode="dev" }) => 
 ({
-    name: "lex-dev-plugin",
+    name: "lex-plugin",
     setup(build)
     {
         build.onEnd(async(result) =>
@@ -30,18 +29,6 @@ const lexDevPlugin = (outputPath, { mode="dev" }) =>
                 fs.writeFileSync(outputPath, html);
             }
         })
-        /*build.onLoad({ filter: /\.jsx$/ }, (args) => {
-            if(args.path)
-            {
-                const contents = fs.readFileSync(args.path, "utf8");
-                return {
-                  contents: `
-                  import Lex from "@lek-js/lex";
-                  ${contents}`,
-                  loader: "jsx",
-                };
-            }
-        });*/
     }
 })
 
@@ -63,18 +50,10 @@ const buildDev = async(page, layout, output) =>
         jsxFactory: "Lex.createElement",
         jsxFragment: "Lex.fragment",
         write: false,
-        plugins : [lexDevPlugin(output, {})],
+        plugins : [lexPlugin(output, {})],
         external: [],
     })
 }
-// if(document.querySelector("body").lastChild !== main) document.querySelector("body").appendChild(main) de footer
-/*
-const buildHtmlDev = async(entryPoint, output) => 
-{
-    const html = buildHtml_(entryPoint, {});
-    fs.writeFileSync(output, html, 'utf-8')
-    return output;
-};
 
 const build = (page, layout, output) =>
 {
@@ -94,18 +73,8 @@ const build = (page, layout, output) =>
         jsxFactory: "Lex.createElement",
         jsxFragment: "Lex.fragment",
         write: false,
-        plugins : [lexDevPlugin(output, { mode: 'production' })]
+        plugins : [lexPlugin(output, { mode: 'production' })]
     })
 }
 
-const buildHtml = (entryPoint, output) =>
-{
-    const html = buildHtml_(entryPoint, { mode: "production" });
-    fs.writeFileSync(output, html, 'utf-8');
-    return output;
-}
-*/
-const buildHtml = null;
-const buildHtmlDev = null;
-const build = null;
-module.exports = { buildDev, buildHtmlDev, build, buildHtml };
+module.exports = { buildDev, build };
