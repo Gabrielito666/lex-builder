@@ -71,7 +71,7 @@ const build = (page, layout, output) =>
         minify: true,
         platform: "browser",
         jsxFactory: "Lex.createElement",
-        jsxFragment: "Lex.fragment",
+        jsxFragment: "Lex.Fragment",
         write: false,
         plugins : [lexPlugin(output, { mode: 'production' })]
     })
