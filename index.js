@@ -48,7 +48,7 @@ const buildDev = async(page, layout, output) =>
         minify: false,
         platform: "browser",
         jsxFactory: "Lex.createElement",
-        jsxFragment: "Lex.fragment",
+        jsxFragment: "Lex.Fragment",
         write: false,
         plugins : [lexPlugin(output, {})],
         external: [],

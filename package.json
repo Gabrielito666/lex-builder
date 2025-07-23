@@ -1,6 +1,6 @@
 {
   "name": "lex-builder",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "la hidratación se basa en el siguiente algorítmo:",
   "main": "index.js",
   "directories": {
